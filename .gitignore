@@ -1,0 +1,19 @@
+# Dependencies
+node_modules/
+
+# Build artifacts
+web-ext-artifacts/
+*.xpi
+*.zip
+
+# Test artifacts
+test-*.png
+
+# Editor/OS
+.DS_Store
+Thumbs.db
+*.swp
+*.swo
+*~
+.idea/
+.vscode/

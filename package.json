@@ -1,0 +1,15 @@
+{
+  "name": "betterplayer",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Firefox extension that enhances SoundCloud's player with repositioning, waveform visualization, timed comments, and track info.",
+  "license": "MIT",
+  "scripts": {
+    "start": "web-ext run",
+    "lint": "web-ext lint",
+    "build": "web-ext build"
+  },
+  "devDependencies": {
+    "web-ext": "^8.0.0"
+  }
+}

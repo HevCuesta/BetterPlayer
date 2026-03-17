@@ -1,0 +1,50 @@
+{
+  "manifest_version": 2,
+  "name": "BetterPlayer",
+  "version": "1.0.0",
+  "description": "Enhances SoundCloud's player with repositioning, waveform, timed comments, and track info on hover.",
+  "icons": {
+    "48": "icons/icon-48.png",
+    "96": "icons/icon-96.png"
+  },
+  "permissions": [
+    "*://soundcloud.com/*",
+    "*://api-v2.soundcloud.com/*",
+    "*://wave.sndcdn.com/*",
+    "*://wis.sndcdn.com/*",
+    "webRequest",
+    "webNavigation",
+    "storage"
+  ],
+  "background": {
+    "scripts": ["src/background.js"]
+  },
+  "content_scripts": [
+    {
+      "matches": ["*://soundcloud.com/*"],
+      "js": [
+        "src/api.js",
+        "src/waveform.js",
+        "src/position.js",
+        "src/panel.js",
+        "src/content.js"
+      ],
+      "css": ["styles/betterplayer.css"],
+      "run_at": "document_idle"
+    }
+  ],
+  "browser_action": {
+    "default_icon": {
+      "48": "icons/icon-48.png",
+      "96": "icons/icon-96.png"
+    },
+    "default_title": "BetterPlayer Settings",
+    "default_popup": "popup/popup.html"
+  },
+  "browser_specific_settings": {
+    "gecko": {
+      "id": "betterplayer@extension",
+      "strict_min_version": "91.0"
+    }
+  }
+}

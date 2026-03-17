@@ -1,0 +1,529 @@
+/* betterplayer.css — All extension styles: positions, panel, transitions */
+
+/* ==========================================================================
+   Position overrides via data-bp-position on <body>
+   ========================================================================== */
+
+/* --- Bottom (default SC layout — minimal overrides) --- */
+body[data-bp-position="bottom"] .playControls {
+  /* default: no changes needed */
+}
+
+/* --- Top --- */
+body[data-bp-position="top"] .playControls {
+  top: 0 !important;
+  bottom: auto !important;
+  position: fixed !important;
+  z-index: 9999 !important;
+}
+
+body[data-bp-position="top"] {
+  padding-top: 48px !important;
+  padding-bottom: 0 !important;
+}
+
+body[data-bp-position="top"] .playControls ~ *,
+body[data-bp-position="top"] .l-top-bar {
+  /* push content below the now-top player */
+}
+
+/* --- Shared left/right helpers --- */
+body[data-bp-position="left"],
+body[data-bp-position="right"] {
+  padding-bottom: 0 !important;
+}
+
+body[data-bp-position="left"] .playControls,
+body[data-bp-position="right"] .playControls {
+  top: 0 !important;
+  bottom: 0 !important;
+  width: 64px !important;
+  height: 100vh !important;
+  position: fixed !important;
+  z-index: 9999 !important;
+  overflow: hidden !important;
+}
+
+body[data-bp-position="left"] .playControls__inner,
+body[data-bp-position="right"] .playControls__inner {
+  height: 100% !important;
+  width: 64px !important;
+  padding: 0 !important;
+}
+
+body[data-bp-position="left"] .playControls__wrapper,
+body[data-bp-position="right"] .playControls__wrapper {
+  width: 64px !important;
+  height: 100% !important;
+  max-width: 64px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+}
+
+body[data-bp-position="left"] .playControls__elements,
+body[data-bp-position="right"] .playControls__elements {
+  flex-direction: column !important;
+  align-items: center !important;
+  justify-content: center !important;
+  width: 64px !important;
+  height: 100% !important;
+  gap: 12px !important;
+  padding: 12px 0 !important;
+}
+
+/* Hide non-essential controls in side mode */
+body[data-bp-position="left"] .playControls__shuffle,
+body[data-bp-position="left"] .playControls__repeat,
+body[data-bp-position="left"] .playControls__timeline,
+body[data-bp-position="left"] .playControls__castControl,
+body[data-bp-position="left"] .playControls__volume,
+body[data-bp-position="right"] .playControls__shuffle,
+body[data-bp-position="right"] .playControls__repeat,
+body[data-bp-position="right"] .playControls__timeline,
+body[data-bp-position="right"] .playControls__castControl,
+body[data-bp-position="right"] .playControls__volume {
+  display: none !important;
+}
+
+/* Sound badge: show only artwork, centered */
+body[data-bp-position="left"] .playControls__soundBadge,
+body[data-bp-position="right"] .playControls__soundBadge {
+  width: 48px !important;
+  height: 48px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: hidden !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+body[data-bp-position="left"] .playControls__soundBadge .playbackSoundBadge,
+body[data-bp-position="right"] .playControls__soundBadge .playbackSoundBadge {
+  width: 48px !important;
+  height: 48px !important;
+  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+body[data-bp-position="left"] .playbackSoundBadge__avatar,
+body[data-bp-position="right"] .playbackSoundBadge__avatar {
+  width: 44px !important;
+  height: 44px !important;
+  margin: 0 !important;
+  border-radius: 4px !important;
+}
+
+body[data-bp-position="left"] .playbackSoundBadge__avatar .sc-artwork,
+body[data-bp-position="right"] .playbackSoundBadge__avatar .sc-artwork,
+body[data-bp-position="left"] .playbackSoundBadge__avatar .image,
+body[data-bp-position="right"] .playbackSoundBadge__avatar .image,
+body[data-bp-position="left"] .playbackSoundBadge__avatar img,
+body[data-bp-position="right"] .playbackSoundBadge__avatar img,
+body[data-bp-position="left"] .playbackSoundBadge__avatar span,
+body[data-bp-position="right"] .playbackSoundBadge__avatar span {
+  width: 44px !important;
+  height: 44px !important;
+}
+
+/* Hide text parts of the sound badge, keep only the artwork */
+body[data-bp-position="left"] .playbackSoundBadge__titleContextContainer,
+body[data-bp-position="left"] .playbackSoundBadge__actions,
+body[data-bp-position="left"] .playbackSoundBadge__lightLink,
+body[data-bp-position="right"] .playbackSoundBadge__titleContextContainer,
+body[data-bp-position="right"] .playbackSoundBadge__actions,
+body[data-bp-position="right"] .playbackSoundBadge__lightLink {
+  display: none !important;
+}
+
+/* Keep play/prev/next buttons centered */
+body[data-bp-position="left"] .playControls__elements > button,
+body[data-bp-position="right"] .playControls__elements > button {
+  margin: 0 !important;
+}
+
+/* ==========================================================================
+   Vertical sidebar extras (progress bar + track info)
+   ========================================================================== */
+
+.bp-vertical-extras {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  width: 100%;
+  flex: 1;
+  min-height: 0;
+  padding: 4px 0;
+}
+
+/* --- Vertical progress bar --- */
+.bp-vbar-wrap {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  min-height: 0;
+  width: 100%;
+}
+
+.bp-vbar-bg {
+  width: 36px;
+  flex: 1;
+  min-height: 40px;
+  background: #333;
+  border-radius: 4px;
+  position: relative;
+  overflow: hidden;
+  cursor: pointer;
+}
+
+.bp-vbar-bg:hover {
+  background: #3a3a3a;
+}
+
+.bp-vbar-fill {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 0%;
+  background: #f50;
+  border-radius: 2px;
+  transition: height 0.25s linear;
+}
+
+.bp-vbar-time {
+  font-size: 9px;
+  color: #999;
+  margin-top: 4px;
+  font-family: monospace;
+  text-align: center;
+}
+
+/* --- Vertical track info --- */
+.bp-vbar-info {
+  writing-mode: vertical-rl;
+  text-orientation: mixed;
+  transform: rotate(180deg);
+  max-height: 140px;
+  overflow: hidden;
+  text-align: left;
+  padding: 0 2px;
+}
+
+.bp-vbar-title {
+  font-size: 10px;
+  color: #ddd;
+  font-weight: 600;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 120px;
+}
+
+.bp-vbar-artist {
+  font-size: 9px;
+  color: #888;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  max-height: 100px;
+}
+
+/* Hide the queue panel and bg divs */
+body[data-bp-position="left"] .playControls__queue,
+body[data-bp-position="left"] .playControls__bg,
+body[data-bp-position="left"] .playControls__panel,
+body[data-bp-position="right"] .playControls__queue,
+body[data-bp-position="right"] .playControls__bg,
+body[data-bp-position="right"] .playControls__panel {
+  display: none !important;
+}
+
+/* --- Left specific --- */
+body[data-bp-position="left"] .playControls {
+  left: 0 !important;
+  right: auto !important;
+}
+
+body[data-bp-position="left"] {
+  padding-left: 64px !important;
+}
+
+/* --- Right specific --- */
+body[data-bp-position="right"] .playControls {
+  right: 0 !important;
+  left: auto !important;
+}
+
+body[data-bp-position="right"] {
+  padding-right: 64px !important;
+}
+
+/* ==========================================================================
+   Hover Panel
+   ========================================================================== */
+
+#bp-panel {
+  position: fixed;
+  z-index: 10000;
+  background: #1a1a1a;
+  color: #ccc;
+  font-family: Interstate, "Lucida Grande", "Lucida Sans Unicode", "Lucida Sans", Garuda, Verdana, Tahoma, sans-serif;
+  font-size: 13px;
+  overflow: hidden;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.2s ease, transform 0.25s ease;
+  box-shadow: 0 -2px 12px rgba(0, 0, 0, 0.5);
+}
+
+#bp-panel.bp-panel-visible {
+  pointer-events: auto;
+  opacity: 1;
+}
+
+/* --- Panel position: bottom (default) — slides up from bottom player --- */
+body[data-bp-position="bottom"] #bp-panel {
+  left: 0;
+  right: 0;
+  bottom: 48px;
+  max-height: 420px;
+  transform: translateY(10px);
+}
+
+body[data-bp-position="bottom"] #bp-panel.bp-panel-visible {
+  transform: translateY(0);
+}
+
+/* --- Panel position: top — slides down from top player --- */
+body[data-bp-position="top"] #bp-panel {
+  left: 0;
+  right: 0;
+  top: 48px;
+  max-height: 420px;
+  transform: translateY(-10px);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.5);
+}
+
+body[data-bp-position="top"] #bp-panel.bp-panel-visible {
+  transform: translateY(0);
+}
+
+/* --- Panel position: left — slides right from left bar --- */
+body[data-bp-position="left"] #bp-panel {
+  top: 0;
+  bottom: 0;
+  left: 64px;
+  width: 400px;
+  max-height: 100vh;
+  transform: translateX(-10px);
+  box-shadow: 2px 0 12px rgba(0, 0, 0, 0.5);
+}
+
+body[data-bp-position="left"] #bp-panel.bp-panel-visible {
+  transform: translateX(0);
+}
+
+/* --- Panel position: right — slides left from right bar --- */
+body[data-bp-position="right"] #bp-panel {
+  top: 0;
+  bottom: 0;
+  right: 64px;
+  width: 400px;
+  max-height: 100vh;
+  transform: translateX(10px);
+  box-shadow: -2px 0 12px rgba(0, 0, 0, 0.5);
+}
+
+body[data-bp-position="right"] #bp-panel.bp-panel-visible {
+  transform: translateX(0);
+}
+
+/* --- Panel inner --- */
+.bp-panel-inner {
+  padding: 16px;
+  overflow-y: auto;
+  max-height: inherit;
+}
+
+body[data-bp-position="left"] .bp-panel-inner,
+body[data-bp-position="right"] .bp-panel-inner {
+  height: 100%;
+  max-height: 100vh;
+}
+
+/* --- Loading state --- */
+#bp-panel.bp-panel-loading .bp-panel-inner::before {
+  content: "Loading...";
+  display: block;
+  text-align: center;
+  color: #888;
+  padding: 20px;
+}
+
+/* --- Sections --- */
+.bp-section {
+  margin-bottom: 12px;
+}
+
+.bp-section.bp-hidden {
+  display: none !important;
+}
+
+.bp-section-title {
+  font-size: 12px;
+  text-transform: uppercase;
+  color: #888;
+  margin: 0 0 8px 0;
+  letter-spacing: 0.5px;
+}
+
+/* ==========================================================================
+   Waveform
+   ========================================================================== */
+
+.bp-waveform-canvas {
+  width: 100%;
+  height: 80px;
+  cursor: pointer;
+  display: block;
+  border-radius: 2px;
+}
+
+/* ==========================================================================
+   Comments
+   ========================================================================== */
+
+.bp-comments-list {
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+body[data-bp-position="left"] .bp-comments-list,
+body[data-bp-position="right"] .bp-comments-list {
+  max-height: 40vh;
+}
+
+.bp-comment {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+  padding: 6px 4px;
+  border-bottom: 1px solid #2a2a2a;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+
+.bp-comment:hover {
+  background: #252525;
+}
+
+.bp-comment.bp-comment-active {
+  background: #2a1a00;
+  border-left: 2px solid #f50;
+  padding-left: 6px;
+}
+
+.bp-comment-avatar {
+  width: 24px;
+  height: 24px;
+  border-radius: 50%;
+  flex-shrink: 0;
+}
+
+.bp-comment-body {
+  min-width: 0;
+}
+
+.bp-comment-user {
+  font-weight: 600;
+  color: #ddd;
+  margin-right: 6px;
+  font-size: 12px;
+}
+
+.bp-comment-time {
+  color: #f50;
+  font-size: 11px;
+  margin-right: 6px;
+}
+
+.bp-comment-text {
+  color: #aaa;
+  font-size: 12px;
+  word-break: break-word;
+}
+
+.bp-no-comments {
+  color: #666;
+  text-align: center;
+  padding: 16px;
+}
+
+/* ==========================================================================
+   Track Info
+   ========================================================================== */
+
+.bp-track-header {
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+}
+
+.bp-track-artwork {
+  width: 80px;
+  height: 80px;
+  border-radius: 4px;
+  flex-shrink: 0;
+}
+
+.bp-track-meta {
+  min-width: 0;
+}
+
+.bp-track-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: #fff;
+  margin-bottom: 2px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.bp-track-artist {
+  font-size: 13px;
+  color: #999;
+  margin-bottom: 6px;
+}
+
+.bp-track-stats {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.bp-stat {
+  font-size: 11px;
+  color: #777;
+}
+
+.bp-track-desc {
+  margin: 10px 0 0;
+  font-size: 12px;
+  color: #999;
+  line-height: 1.5;
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.bp-track-tags {
+  margin-top: 8px;
+  font-size: 11px;
+  color: #666;
+}
