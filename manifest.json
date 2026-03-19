@@ -45,10 +45,10 @@
   "browser_specific_settings": {
     "gecko": {
       "id": "betterplayer@extension",
-      "strict_min_version": "91.0"
+      "strict_min_version": "91.0",
+      "data_collection_permissions": {
+        "is_collecting": false
+      }
     }
-  },
-  "data_collection_permissions": {
-    "is_collecting": false
   }
 }
