@@ -49,15 +49,25 @@ body[data-bp-position="right"] .playControls__inner {
   height: 100% !important;
   width: 64px !important;
   padding: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  align-items: center !important;
+  float: none !important;
 }
 
 body[data-bp-position="left"] .playControls__wrapper,
-body[data-bp-position="right"] .playControls__wrapper {
+body[data-bp-position="right"] .playControls__wrapper,
+body[data-bp-position="left"] .playControls__wrapper.l-container.l-fullwidth,
+body[data-bp-position="right"] .playControls__wrapper.l-container.l-fullwidth {
   width: 64px !important;
+  min-width: 0 !important;
   height: 100% !important;
   max-width: 64px !important;
   padding: 0 !important;
   margin: 0 !important;
+  display: flex !important;
+  justify-content: center !important;
+  float: none !important;
 }
 
 body[data-bp-position="left"] .playControls__elements,
@@ -67,32 +77,71 @@ body[data-bp-position="right"] .playControls__elements {
   justify-content: center !important;
   width: 64px !important;
   height: 100% !important;
-  gap: 12px !important;
-  padding: 12px 0 !important;
+  gap: 8px !important;
+  padding: 8px 0 !important;
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
 }
 
-/* Hide non-essential controls in side mode */
-body[data-bp-position="left"] .playControls__shuffle,
-body[data-bp-position="left"] .playControls__repeat,
+/* Hide timeline/cast/volume in side mode (keep shuffle & repeat) */
 body[data-bp-position="left"] .playControls__timeline,
 body[data-bp-position="left"] .playControls__castControl,
 body[data-bp-position="left"] .playControls__volume,
-body[data-bp-position="right"] .playControls__shuffle,
-body[data-bp-position="right"] .playControls__repeat,
 body[data-bp-position="right"] .playControls__timeline,
 body[data-bp-position="right"] .playControls__castControl,
 body[data-bp-position="right"] .playControls__volume {
   display: none !important;
 }
 
-/* Sound badge: show only artwork, centered */
-body[data-bp-position="left"] .playControls__soundBadge,
-body[data-bp-position="right"] .playControls__soundBadge {
-  width: 48px !important;
-  height: 48px !important;
+/* Shuffle & Repeat: show as compact sidebar buttons */
+body[data-bp-position="left"] .playControls__shuffle,
+body[data-bp-position="left"] .playControls__repeat,
+body[data-bp-position="right"] .playControls__shuffle,
+body[data-bp-position="right"] .playControls__repeat {
+  width: 32px !important;
+  height: 32px !important;
+  margin: 0 !important;
+  flex-shrink: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  overflow: hidden !important;
+}
+
+/* Inner buttons inside shuffle/repeat wrappers */
+body[data-bp-position="left"] .playControls__shuffle button,
+body[data-bp-position="left"] .playControls__repeat button,
+body[data-bp-position="right"] .playControls__shuffle button,
+body[data-bp-position="right"] .playControls__repeat button {
+  width: 100% !important;
+  height: 100% !important;
   margin: 0 !important;
   padding: 0 !important;
-  overflow: hidden !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Sound badge inner: zero out SC margins */
+body[data-bp-position="left"] .playbackSoundBadge,
+body[data-bp-position="right"] .playbackSoundBadge {
+  margin: 0 !important;
+  padding: 0 !important;
+}
+
+body[data-bp-position="left"] .playbackSoundBadge__avatar,
+body[data-bp-position="right"] .playbackSoundBadge__avatar {
+  margin: 0 auto !important;
+}
+
+/* Sound badge: artwork + actions stacked vertically */
+body[data-bp-position="left"] .playControls__soundBadge,
+body[data-bp-position="right"] .playControls__soundBadge {
+  width: 64px !important;
+  height: auto !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  overflow: visible !important;
   flex-shrink: 0 !important;
   display: flex !important;
   align-items: center !important;
@@ -101,12 +150,13 @@ body[data-bp-position="right"] .playControls__soundBadge {
 
 body[data-bp-position="left"] .playControls__soundBadge .playbackSoundBadge,
 body[data-bp-position="right"] .playControls__soundBadge .playbackSoundBadge {
-  width: 48px !important;
-  height: 48px !important;
-  overflow: hidden !important;
+  width: 64px !important;
+  height: auto !important;
+  overflow: visible !important;
   display: flex !important;
+  flex-direction: column !important;
   align-items: center !important;
-  justify-content: center !important;
+  gap: 8px !important;
 }
 
 body[data-bp-position="left"] .playbackSoundBadge__avatar,
@@ -129,20 +179,110 @@ body[data-bp-position="right"] .playbackSoundBadge__avatar span {
   height: 44px !important;
 }
 
-/* Hide text parts of the sound badge, keep only the artwork */
+/* Hide text parts of the sound badge, keep artwork + actions */
 body[data-bp-position="left"] .playbackSoundBadge__titleContextContainer,
-body[data-bp-position="left"] .playbackSoundBadge__actions,
 body[data-bp-position="left"] .playbackSoundBadge__lightLink,
 body[data-bp-position="right"] .playbackSoundBadge__titleContextContainer,
-body[data-bp-position="right"] .playbackSoundBadge__actions,
 body[data-bp-position="right"] .playbackSoundBadge__lightLink {
   display: none !important;
 }
 
-/* Keep play/prev/next buttons centered */
-body[data-bp-position="left"] .playControls__elements > button,
-body[data-bp-position="right"] .playControls__elements > button {
+/* Show action buttons (like, follow, queue) stacked vertically */
+body[data-bp-position="left"] .playbackSoundBadge__actions,
+body[data-bp-position="right"] .playbackSoundBadge__actions {
+  display: flex !important;
+  flex-direction: column !important;
+  align-items: center !important;
+  gap: 4px !important;
+  width: 64px !important;
+}
+
+/* Hide the queue button inside sound badge actions */
+body[data-bp-position="left"] .playbackSoundBadge__showQueue,
+body[data-bp-position="right"] .playbackSoundBadge__showQueue {
+  display: none !important;
+}
+
+body[data-bp-position="left"] .playbackSoundBadge__actions button,
+body[data-bp-position="right"] .playbackSoundBadge__actions button {
+  width: 32px !important;
+  height: 32px !important;
+  margin: 0 auto !important;
+  padding: 0 !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+}
+
+/* Center all direct children in the 64px sidebar */
+body[data-bp-position="left"] .playControls__elements > *:not(.bp-vertical-extras),
+body[data-bp-position="right"] .playControls__elements > *:not(.bp-vertical-extras) {
   margin: 0 !important;
+  flex-shrink: 0 !important;
+}
+
+/* Zero out SC's button padding/margins that push icons off-center */
+body[data-bp-position="left"] .playControls__prev,
+body[data-bp-position="left"] .playControls__play,
+body[data-bp-position="left"] .playControls__next,
+body[data-bp-position="right"] .playControls__prev,
+body[data-bp-position="right"] .playControls__play,
+body[data-bp-position="right"] .playControls__next {
+  margin: 0 !important;
+  padding: 6px !important;
+}
+
+/* ==========================================================================
+   Panel toggle button (top-left corner of sidebar)
+   ========================================================================== */
+
+.bp-panel-toggle {
+  display: none;
+}
+
+body[data-bp-position="left"] .bp-panel-toggle,
+body[data-bp-position="right"] .bp-panel-toggle,
+body[data-bp-position="top"] .bp-panel-toggle,
+body[data-bp-position="bottom"] .bp-panel-toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  position: fixed;
+  width: 24px;
+  height: 24px;
+  background: transparent;
+  border: none;
+  color: #999;
+  cursor: pointer;
+  z-index: 10000;
+  border-radius: 4px;
+  transition: color 0.15s, background 0.15s, transform 0.3s ease;
+  padding: 0;
+}
+
+body[data-bp-position="left"] .bp-panel-toggle {
+  top: 8px;
+  left: 20px;
+}
+
+body[data-bp-position="right"] .bp-panel-toggle {
+  top: 8px;
+  right: 20px;
+}
+
+body[data-bp-position="top"] .bp-panel-toggle {
+  top: 12px;
+  left: 8px;
+}
+
+body[data-bp-position="bottom"] .bp-panel-toggle {
+  bottom: 12px;
+  left: 8px;
+}
+
+.bp-panel-toggle:hover {
+  color: #fff;
+  background: rgba(255, 255, 255, 0.1);
 }
 
 /* ==========================================================================
@@ -156,11 +296,12 @@ body[data-bp-position="right"] .playControls__elements > button {
   gap: 8px;
   width: 100%;
   flex: 1;
-  min-height: 0;
+  min-height: 10%;
+  max-height: 50%;
   padding: 4px 0;
 }
 
-/* --- Vertical progress bar --- */
+/* --- Vertical progress bar (mirrors SC's .playbackTimeline, rotated) --- */
 .bp-vbar-wrap {
   display: flex;
   flex-direction: column;
@@ -170,38 +311,54 @@ body[data-bp-position="right"] .playControls__elements > button {
   width: 100%;
 }
 
-.bp-vbar-bg {
-  width: 36px;
+.bp-vbar-timePassed,
+.bp-vbar-duration {
+  font-size: 12px;
+  color: #fff;
+  text-align: center;
+  line-height: 1;
+  padding: 4px 0;
+  font-family: "Söhne", system-ui, -apple-system, "Segoe UI", Roboto, sans-serif;
+}
+
+.bp-vbar-progressWrapper {
+  position: relative;
   flex: 1;
   min-height: 40px;
-  background: #333;
-  border-radius: 4px;
-  position: relative;
-  overflow: hidden;
+  width: 16px;
   cursor: pointer;
 }
 
-.bp-vbar-bg:hover {
-  background: #3a3a3a;
+.bp-vbar-progressBackground {
+  position: absolute;
+  left: 50%;
+  top: 0;
+  width: 2px;
+  height: 100%;
+  background: rgba(255, 255, 255, 0.15);
+  transform: translateX(-50%);
 }
 
-.bp-vbar-fill {
+.bp-vbar-progressBar {
   position: absolute;
-  bottom: 0;
-  left: 0;
-  width: 100%;
+  left: 50%;
+  top: 0;
+  width: 2px;
   height: 0%;
   background: #f50;
-  border-radius: 2px;
-  transition: height 0.25s linear;
+  transform: translateX(-50%);
+  min-height: 1px;
 }
 
-.bp-vbar-time {
-  font-size: 9px;
-  color: #999;
-  margin-top: 4px;
-  font-family: monospace;
-  text-align: center;
+.bp-vbar-progressHandle {
+  position: absolute;
+  left: 50%;
+  top: 0%;
+  width: 8px;
+  height: 8px;
+  background: #121212;
+  border-radius: 100%;
+  margin: -4px 0 0 -4px;
 }
 
 /* --- Vertical track info --- */
@@ -217,30 +374,44 @@ body[data-bp-position="right"] .playControls__elements > button {
 
 .bp-vbar-title {
   font-size: 10px;
-  color: #ddd;
+  color: #ddd !important;
   font-weight: 600;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 120px;
+  text-decoration: none;
+  display: block;
+}
+
+.bp-vbar-title:hover {
+  text-decoration: underline;
+  color: #ddd !important;
 }
 
 .bp-vbar-artist {
   font-size: 9px;
-  color: #888;
+  color: #888 !important;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   max-height: 100px;
+  text-decoration: none;
+  display: block;
 }
 
-/* Hide the queue panel and bg divs */
-body[data-bp-position="left"] .playControls__queue,
+.bp-vbar-artist:hover {
+  color: #bbb !important;
+  text-decoration: underline;
+}
+
+/* Hide bg div, queue panel, and queue button */
 body[data-bp-position="left"] .playControls__bg,
 body[data-bp-position="left"] .playControls__panel,
-body[data-bp-position="right"] .playControls__queue,
+body[data-bp-position="left"] .playControls__queue,
 body[data-bp-position="right"] .playControls__bg,
-body[data-bp-position="right"] .playControls__panel {
+body[data-bp-position="right"] .playControls__panel,
+body[data-bp-position="right"] .playControls__queue {
   display: none !important;
 }
 
@@ -489,17 +660,30 @@ body[data-bp-position="right"] .bp-comments-list {
 .bp-track-title {
   font-size: 16px;
   font-weight: 700;
-  color: #fff;
+  color: #fff !important;
   margin-bottom: 2px;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  text-decoration: none;
+  display: block;
+}
+
+.bp-track-title:hover {
+  text-decoration: underline;
 }
 
 .bp-track-artist {
   font-size: 13px;
-  color: #999;
+  color: #999 !important;
   margin-bottom: 6px;
+  text-decoration: none;
+  display: block;
+}
+
+.bp-track-artist:hover {
+  color: #ccc !important;
+  text-decoration: underline;
 }
 
 .bp-track-stats {
