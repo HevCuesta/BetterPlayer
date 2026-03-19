@@ -69,14 +69,6 @@
       BPPanel.scheduleHide();
     });
 
-    // Click event (used by click mode)
-    playerEl.addEventListener("click", async (e) => {
-      if (BPPanel.getTriggerMode() !== "click") return;
-      // Don't intercept clicks on actual controls
-      if (e.target.closest("button, a, input, .playbackTimeline")) return;
-      const trackId = await resolveCurrentTrack();
-      if (trackId) BPPanel.toggle(trackId);
-    });
   }
 
   // --- Pinned mode: auto-show when track is playing ---
