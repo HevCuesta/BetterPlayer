@@ -8,8 +8,6 @@ var BPWaveform = (function () {
   const BAR_GAP = 1;
   const PLAYED_COLOR = "#f50";
   const UNPLAYED_COLOR = "#666";
-  const COMMENT_MARKER_COLOR = "#ff0";
-
   /**
    * Create a waveform renderer bound to a canvas element.
    * Returns an object with update/draw/destroy methods.
@@ -46,7 +44,7 @@ var BPWaveform = (function () {
       for (let i = 0; i < totalBars; i++) {
         const sampleIdx = Math.floor(i * step);
         const val = samples[sampleIdx] || 0;
-        const barH = Math.max(2, (val / 1.0) * h * 0.9);
+        const barH = Math.max(1, (val / 1.0) * h * 0.85);
         const x = i * (BAR_WIDTH + BAR_GAP);
         const y = h - barH;
 
@@ -56,7 +54,7 @@ var BPWaveform = (function () {
 
       // Comment markers
       if (duration > 0 && commentTimestamps.length) {
-        ctx.fillStyle = COMMENT_MARKER_COLOR;
+        ctx.fillStyle = "#ff0";
         for (const ms of commentTimestamps) {
           const frac = ms / (duration * 1000);
           const x = frac * w;
