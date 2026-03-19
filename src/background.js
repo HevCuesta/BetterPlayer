@@ -4,10 +4,12 @@
   "use strict";
 
   let clientId = null;
+  let oauthToken = null;
 
-  // Restore cached client_id on startup
-  browser.storage.local.get("clientId").then((data) => {
+  // Restore cached values on startup
+  browser.storage.local.get(["clientId", "oauthToken"]).then((data) => {
     if (data.clientId) clientId = data.clientId;
+    if (data.oauthToken) oauthToken = data.oauthToken;
   });
 
   // --- Client ID extraction via webRequest ---
@@ -26,6 +28,29 @@
       }
     },
     { urls: ["*://api-v2.soundcloud.com/*"] }
+  );
+
+  // --- OAuth token capture via webRequest ---
+
+  browser.webRequest.onBeforeSendHeaders.addListener(
+    (details) => {
+      if (!details.requestHeaders) return;
+      for (const header of details.requestHeaders) {
+        if (
+          header.name.toLowerCase() === "authorization" &&
+          header.value.startsWith("OAuth ")
+        ) {
+          const token = header.value.slice(6);
+          if (token && token !== oauthToken) {
+            oauthToken = token;
+            browser.storage.local.set({ oauthToken: token });
+          }
+          break;
+        }
+      }
+    },
+    { urls: ["*://api-v2.soundcloud.com/*"] },
+    ["requestHeaders"]
   );
 
   // --- API helpers ---
@@ -70,6 +95,48 @@
     });
   }
 
+  // --- Authenticated API helper ---
+
+  async function ensureOAuth() {
+    if (oauthToken) return oauthToken;
+    const data = await browser.storage.local.get("oauthToken");
+    if (data.oauthToken) {
+      oauthToken = data.oauthToken;
+      return oauthToken;
+    }
+    return null;
+  }
+
+  async function apiAuthFetch(method, endpoint, body = null) {
+    const cid = await ensureClientId();
+    if (!cid) throw new Error("client_id not available yet");
+    const token = await ensureOAuth();
+    if (!token) throw new Error("Not logged in — play a track first");
+
+    const url = new URL(`https://api-v2.soundcloud.com${endpoint}`);
+    url.searchParams.set("client_id", cid);
+
+    const headers = {
+      Authorization: `OAuth ${token}`,
+    };
+
+    const opts = { method, headers };
+    if (body) {
+      headers["Content-Type"] = "application/json";
+      opts.body = JSON.stringify(body);
+    }
+
+    const res = await fetch(url.toString(), opts);
+    if (res.status === 401) {
+      oauthToken = null;
+      browser.storage.local.remove("oauthToken");
+      throw new Error("Auth expired — reload SoundCloud");
+    }
+    if (!res.ok) throw new Error(`API ${res.status}: ${method} ${endpoint}`);
+    const text = await res.text();
+    return text ? JSON.parse(text) : {};
+  }
+
   // --- Waveform fetch (routed through background to bypass page CSP) ---
 
   async function fetchWaveform(waveformUrl) {
@@ -105,6 +172,51 @@
         return fetchWaveform(msg.waveformUrl)
           .then((data) => ({ samples: data.samples || [] }))
           .catch((e) => ({ error: e.message }));
+
+      case "likeTrack":
+        return apiAuthFetch("POST", `/likes/tracks/${msg.trackId}`)
+          .then(() => ({ ok: true }))
+          .catch((e) => ({ error: e.message }));
+
+      case "unlikeTrack":
+        return apiAuthFetch("DELETE", `/likes/tracks/${msg.trackId}`)
+          .then(() => ({ ok: true }))
+          .catch((e) => ({ error: e.message }));
+
+      case "repostTrack":
+        return apiAuthFetch("POST", `/reposts/tracks/${msg.trackId}`)
+          .then(() => ({ ok: true }))
+          .catch((e) => ({ error: e.message }));
+
+      case "unrepostTrack":
+        return apiAuthFetch("DELETE", `/reposts/tracks/${msg.trackId}`)
+          .then(() => ({ ok: true }))
+          .catch((e) => ({ error: e.message }));
+
+      case "followUser":
+        return apiAuthFetch("POST", `/me/followings/${msg.userId}`)
+          .then(() => ({ ok: true }))
+          .catch((e) => ({ error: e.message }));
+
+      case "unfollowUser":
+        return apiAuthFetch("DELETE", `/me/followings/${msg.userId}`)
+          .then(() => ({ ok: true }))
+          .catch((e) => ({ error: e.message }));
+
+      case "checkLikeStatus":
+        return apiAuthFetch("GET", `/likes/tracks/${msg.trackId}`)
+          .then(() => ({ liked: true }))
+          .catch(() => ({ liked: false }));
+
+      case "checkRepostStatus":
+        return apiAuthFetch("GET", `/reposts/tracks/${msg.trackId}`)
+          .then(() => ({ reposted: true }))
+          .catch(() => ({ reposted: false }));
+
+      case "checkFollowStatus":
+        return apiAuthFetch("GET", `/me/followings/${msg.userId}`)
+          .then(() => ({ following: true }))
+          .catch(() => ({ following: false }));
 
       case "positionChanged":
       case "settingsChanged":

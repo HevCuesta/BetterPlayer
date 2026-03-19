@@ -13,6 +13,7 @@
     "*://wave.sndcdn.com/*",
     "*://wis.sndcdn.com/*",
     "webRequest",
+    "webRequestBlocking",
     "webNavigation",
     "storage"
   ],
