@@ -60,6 +60,15 @@ var BPPosition = (function () {
         '<a class="bp-vbar-artist" href="#"></a>' +
         "</div>";
 
+      // SPA navigation for title/artist links
+      verticalEl.querySelector(".bp-vbar-info").addEventListener("click", function (e) {
+        var link = e.target.closest("a");
+        if (!link || link.href === "#" || !link.getAttribute("href")) return;
+        e.preventDefault();
+        history.pushState({}, "", link.getAttribute("href"));
+        window.dispatchEvent(new PopStateEvent("popstate"));
+      });
+
       // Click-to-seek on the progress wrapper
       var wrapper = verticalEl.querySelector(".bp-vbar-progressWrapper");
       wrapper.addEventListener("click", function (e) {

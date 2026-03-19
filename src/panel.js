@@ -34,6 +34,15 @@ var BPPanel = (function () {
       "</div>";
     document.body.appendChild(panel);
 
+    // SPA navigation for track/artist links
+    panel.addEventListener("click", function (e) {
+      var link = e.target.closest(".bp-track-title, .bp-track-artist");
+      if (!link || !link.getAttribute("href")) return;
+      e.preventDefault();
+      history.pushState({}, "", link.getAttribute("href"));
+      window.dispatchEvent(new PopStateEvent("popstate"));
+    });
+
     // Hover keep-alive on panel itself (only relevant in hover mode)
     panel.addEventListener("mouseenter", function () {
       if (triggerMode === "hover") clearHideTimeout();
