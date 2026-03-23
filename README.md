@@ -2,6 +2,8 @@
 
 Enhances SoundCloud's player with repositioning, waveform visualization, timed comments, and track info. Firefox extension (Manifest V2).
 
+[![Get the Add-on](https://extensionworkshop.com/assets/img/documentation/publish/get-the-addon-178x60px.dad84b42.png)](https://addons.mozilla.org/addon/betterplayer-for-soundcloud/)
+
 ## Features
 
 - **Player repositioning** — move the player bar to the top, bottom, left, or right of the viewport
